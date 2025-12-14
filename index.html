@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSP Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Smooth fade in for result */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom input focus ring to match theme */
+        .custom-focus:focus-within {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4 text-slate-800">
+
+    <!-- Main Card -->
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-indigo-600 p-6 text-center">
+            <h1 class="text-2xl font-bold text-white tracking-tight">MSP Calculator</h1>
+            <p class="text-indigo-100 text-sm mt-1 opacity-90">Calculate Minimum Selling Price</p>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8 space-y-6">
+
+            <!-- Input Group: SPC -->
+            <div class="space-y-2">
+                <label for="spc" class="block text-sm font-medium text-slate-600 ml-1">
+                    SPC <span class="text-xs text-slate-400 font-normal">(Standard Price Cost)</span>
+                </label>
+                <div class="relative custom-focus rounded-xl border border-slate-200 bg-slate-50 transition-all duration-200">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-slate-400 font-semibold">₹</span>
+                    </div>
+                    <input type="number" id="spc" placeholder="0.00" 
+                        class="block w-full pl-10 pr-4 py-3.5 bg-transparent border-none rounded-xl focus:ring-0 text-slate-800 placeholder-slate-400 font-medium"
+                        oninput="calculateMSP()">
+                </div>
+            </div>
+            
+            <!-- Input Group: MRP -->
+            <div class="space-y-2">
+                <label for="mrp" class="block text-sm font-medium text-slate-600 ml-1">
+                    MRP <span class="text-xs text-slate-400 font-normal">(Maximum Retail Price)</span>
+                </label>
+                <div class="relative custom-focus rounded-xl border border-slate-200 bg-slate-50 transition-all duration-200">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-slate-400 font-semibold">₹</span>
+                    </div>
+                    <input type="number" id="mrp" placeholder="0.00" 
+                        class="block w-full pl-10 pr-4 py-3.5 bg-transparent border-none rounded-xl focus:ring-0 text-slate-800 placeholder-slate-400 font-medium"
+                        oninput="calculateMSP()">
+                </div>
+            </div>
+
+            <!-- Divider with Formula -->
+            <div class="relative py-2">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-100"></div>
+                </div>
+                <div class="relative flex justify-center">
+                    <span class="bg-white px-3 text-xs text-slate-400 select-none">
+                        Formula: 0.37 × MRP + 0.63 × SPC
+                    </span>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="bg-slate-50 rounded-xl p-6 text-center border border-slate-100 transition-colors duration-300" id="result-container">
+                <p class="text-sm font-medium text-slate-500 mb-1 uppercase tracking-wider">Calculated MSP</p>
+                <div class="flex justify-center items-baseline gap-1 text-indigo-600">
+                    <span class="text-2xl font-bold">₹</span>
+                    <span id="msp-result" class="text-5xl font-bold tracking-tight">0.00</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <button onclick="resetCalculator()" 
+                class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-600 font-medium rounded-xl border border-slate-200 transition-all duration-200 flex items-center justify-center gap-2 group">
+                <i class="fas fa-redo-alt text-xs transition-transform group-hover:rotate-180"></i>
+                Reset Values
+            </button>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const mrpInput = document.getElementById('mrp');
+        const spcInput = document.getElementById('spc');
+        const mspResult = document.getElementById('msp-result');
+        const resultContainer = document.getElementById('result-container');
+
+        function calculateMSP() {
+            // Get values and convert to float (default to 0 if empty)
+            const mrp = parseFloat(mrpInput.value) || 0;
+            const spc = parseFloat(spcInput.value) || 0;
+
+            // Formula: MSP = 0.37*MRP + 0.63*SPC
+            const msp = (0.37 * mrp) + (0.63 * spc);
+
+            // Format logic:
+            // If the result is a whole number, show no decimals.
+            // If it has decimals, show up to 2 places.
+            const formattedMSP = msp.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // Update UI
+            // Add a subtle animation effect when value changes significantly
+            if (mspResult.innerText !== formattedMSP) {
+                mspResult.innerText = formattedMSP;
+                
+                // Highlight the result box slightly if values are present
+                if (mrp > 0 || spc > 0) {
+                    resultContainer.classList.remove('bg-slate-50');
+                    resultContainer.classList.add('bg-indigo-50/50');
+                    mspResult.parentElement.classList.add('fade-in');
+                    
+                    // Remove animation class after it plays so it can be re-triggered
+                    setTimeout(() => {
+                        mspResult.parentElement.classList.remove('fade-in');
+                    }, 300);
+                } else {
+                    resultContainer.classList.add('bg-slate-50');
+                    resultContainer.classList.remove('bg-indigo-50/50');
+                }
+            }
+        }
+
+        function resetCalculator() {
+            mrpInput.value = '';
+            spcInput.value = '';
+            mspResult.innerText = '0.00';
+            resultContainer.classList.add('bg-slate-50');
+            resultContainer.classList.remove('bg-indigo-50/50');
+            mrpInput.focus();
+        }
+
+        // Initialize
+        mrpInput.focus();
+    </script>
+</body>
+</html>
