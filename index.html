@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSP and PLS Calculator</title>
+    <title>">Minimum Selling Price (MSP) & Percentage Layer System (PLS) Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -38,8 +38,8 @@
         
         <!-- Header -->
         <div class="bg-indigo-600 p-6 text-center">
-            <h1 class="text-2xl font-bold text-white tracking-tight">Minimum Selling Price and Percentage Layer Calculator</h1>
-            <p class="text-indigo-100 text-sm mt-1 opacity-90">Calculate Minimum Selling Price and Percentage Layer</p>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Minimum Selling Price (MSP) & Percentage Layer System (PLS) Calculator</h1>
+            <!-- <p class="text-indigo-100 text-sm mt-1 opacity-90"></p> -->
         </div>
 
         <!-- Content -->
@@ -81,11 +81,39 @@
                 </label>
                 <div class="relative custom-focus rounded-xl border border-slate-200 bg-slate-50 transition-all duration-200">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <span class="text-slate-400 font-semibold">₹</span>
+                        <span class="text-slate-400 font-semibold">%</span>
                     </div>
-                    <input type="number" id="x" placeholder="Enter a prime number (1–100)" 
+                    <!-- <input type="number" id="x" placeholder="Enter a prime number (1–100)" 
                         class="block w-full pl-10 pr-4 py-3.5 bg-transparent border-none rounded-xl focus:ring-0 text-slate-800 placeholder-slate-400 font-medium"
-                        oninput="calculateMSP()">
+                        oninput="calculateMSP()"> -->
+                    <select name="" id="x" oninput="calculateMSP()" class="block w-full pl-10 pr-4 py-3.5 bg-transparent border-none rounded-xl focus:ring-0 text-slate-800 placeholder-slate-400 font-medium">
+                        <option value="0">Default</option>
+                        <option value="2%">2%</option>
+                        <option value="3%">3%</option>
+                        <option value="5%">5%</option>
+                        <option value="7%">7%</option>
+                        <option value="11%">11%</option>
+                        <option value="13%">13%</option>
+                        <option value="17%">17%</option>
+                        <option value="19%">19%</option>
+                        <option value="23%">23%</option>
+                        <option value="29%">29%</option>
+                        <option value="31%">31%</option>
+                        <option value="37%">37%</option>
+                        <option value="41%">41%</option>
+                        <option value="43%">43%</option>
+                        <option value="47%">47%</option>
+                        <option value="53%">53%</option>
+                        <option value="59%">59%</option>
+                        <option value="61%">61%</option>
+                        <option value="67%">67%</option>
+                        <option value="71%">71%</option>
+                        <option value="73%">73%</option>
+                        <option value="79%">79%</option>
+                        <option value="83%">83%</option>
+                        <option value="89%">89%</option>
+                        <option value="97%">97%</option>
+                    </select>
                 </div>
             </div>
 
@@ -99,10 +127,9 @@
                         MSP: 0.37 × MRP + 0.63 × SPC
                     </span>
                 </div>
-                <!-- <div class="relative flex justify-center">
-                    <span class="bg-white px-3 text-xs text-slate-400 select-none">
-                        Formula: (((63 × PLS + 3700) × MRP
-                        - (63 × PLS - 6300) × SPC)/10000)
+                <!-- <div class="relative flex justify-between">
+                    <span class="bg-white px-3 text-xs text-slate-600 select-none">
+                        PLS: (((63 × PLS + 3700) × MRP - (63 × PLS - 6300) × SPC)/10000)
                     </span>
                 </div> -->
             </div>
