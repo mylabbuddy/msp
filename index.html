@@ -38,8 +38,8 @@
         
         <!-- Header -->
         <div class="bg-indigo-600 p-6 text-center">
-            <h1 class="text-2xl font-bold text-white tracking-tight">MSP Calculator</h1>
-            <p class="text-indigo-100 text-sm mt-1 opacity-90">Calculate Minimum Selling Price</p>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Minimum Selling Price and Percentage Layer Calculator</h1>
+            <p class="text-indigo-100 text-sm mt-1 opacity-90">Calculate Minimum Selling Price and Percentage Layer</p>
         </div>
 
         <!-- Content -->
@@ -74,6 +74,20 @@
                         oninput="calculateMSP()">
                 </div>
             </div>
+            <!-- Input Group: x -->
+            <div class="space-y-2">
+                <label for="x" class="block text-sm font-medium text-slate-600 ml-1">
+                    X <span class="text-xs text-slate-400 font-normal">(Percentage Layer)</span>
+                </label>
+                <div class="relative custom-focus rounded-xl border border-slate-200 bg-slate-50 transition-all duration-200">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-slate-400 font-semibold">₹</span>
+                    </div>
+                    <input type="number" id="x" placeholder="Enter a prime number (1–100)" 
+                        class="block w-full pl-10 pr-4 py-3.5 bg-transparent border-none rounded-xl focus:ring-0 text-slate-800 placeholder-slate-400 font-medium"
+                        oninput="calculateMSP()">
+                </div>
+            </div>
 
             <!-- Divider with Formula -->
             <div class="relative py-2">
@@ -81,10 +95,16 @@
                     <div class="w-full border-t border-slate-100"></div>
                 </div>
                 <div class="relative flex justify-center">
-                    <span class="bg-white px-3 text-xs text-slate-400 select-none">
-                        Formula: 0.37 × MRP + 0.63 × SPC
+                    <span class="bg-white px-3 text-xs text-slate-600 select-none">
+                        MSP: 0.37 × MRP + 0.63 × SPC
                     </span>
                 </div>
+                <!-- <div class="relative flex justify-center">
+                    <span class="bg-white px-3 text-xs text-slate-400 select-none">
+                        Formula: (((63 × PLS + 3700) × MRP
+                        - (63 × PLS - 6300) × SPC)/10000)
+                    </span>
+                </div> -->
             </div>
 
             <!-- Result Section -->
@@ -92,7 +112,7 @@
                 <p class="text-sm font-medium text-slate-500 mb-1 uppercase tracking-wider">Calculated MSP</p>
                 <div class="flex justify-center items-baseline gap-1 text-indigo-600">
                     <span class="text-2xl font-bold">₹</span>
-                    <span id="msp-result" class="text-5xl font-bold tracking-tight">0.00</span>
+                    <span id="percentage-result" class="text-5xl font-bold tracking-tight">0.00</span>
                 </div>
             </div>
 
@@ -110,39 +130,42 @@
     <script>
         const mrpInput = document.getElementById('mrp');
         const spcInput = document.getElementById('spc');
-        const mspResult = document.getElementById('msp-result');
+        const xInput = document.getElementById('x');
+        const percentageResult = document.getElementById('percentage-result');
         const resultContainer = document.getElementById('result-container');
 
         function calculateMSP() {
             // Get values and convert to float (default to 0 if empty)
             const mrp = parseFloat(mrpInput.value) || 0;
             const spc = parseFloat(spcInput.value) || 0;
+            const x = parseFloat(xInput.value) || 0;
 
             // Formula: MSP = 0.37*MRP + 0.63*SPC
-            const msp = (0.37 * mrp) + (0.63 * spc);
+            // const msp = (0.37 * mrp) + (0.63 * spc);
+            const x_formula = (((63*x + 3700) * mrp - (63*x - 6300) * spc)/10000)
 
             // Format logic:
             // If the result is a whole number, show no decimals.
             // If it has decimals, show up to 2 places.
-            const formattedMSP = msp.toLocaleString('en-IN', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+            const formattedMSP = x_formula.toLocaleString('en-IN', {
+                minimumFractionDigits: 6,
+                maximumFractionDigits: 6
             });
 
             // Update UI
             // Add a subtle animation effect when value changes significantly
-            if (mspResult.innerText !== formattedMSP) {
-                mspResult.innerText = formattedMSP;
+            if (percentageResult.innerText !== formattedMSP) {
+                percentageResult.innerText = formattedMSP;
                 
                 // Highlight the result box slightly if values are present
-                if (mrp > 0 || spc > 0) {
+                if (mrp > 0 || spc > 0 || x > 0) {
                     resultContainer.classList.remove('bg-slate-50');
                     resultContainer.classList.add('bg-indigo-50/50');
-                    mspResult.parentElement.classList.add('fade-in');
+                    percentageResult.parentElement.classList.add('fade-in');
                     
                     // Remove animation class after it plays so it can be re-triggered
                     setTimeout(() => {
-                        mspResult.parentElement.classList.remove('fade-in');
+                        percentageResult.parentElement.classList.remove('fade-in');
                     }, 300);
                 } else {
                     resultContainer.classList.add('bg-slate-50');
@@ -154,7 +177,8 @@
         function resetCalculator() {
             mrpInput.value = '';
             spcInput.value = '';
-            mspResult.innerText = '0.00';
+            xInput,value = '';
+            percentageResult.innerText = '0.00';
             resultContainer.classList.add('bg-slate-50');
             resultContainer.classList.remove('bg-indigo-50/50');
             mrpInput.focus();
